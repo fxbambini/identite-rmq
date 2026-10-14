@@ -1,11 +1,10 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"></head><body>
-<title>Identités remarquables</title>
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"></head><body><title>Identités remarquables</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=STIX+Two+Text:ital,wght@0,400;0,600;1,400;1,600&display=swap">
 <style>
-/* Layout : une colonne — modes + score, rappel des trois formules, carte quadrillée avec la question, réponse, aides */
+/* Layout : une colonne — modes + score, carte quadrillée avec la question, réponse, aides */
 :root{
   --paper:#f4f6fb; --surface:#ffffff; --grid:#e3e9f4; --margin:#eeb3ae;
   --ink:#1b2a4a; --muted:#5a6785; --line:#cfd8e8;
@@ -104,7 +103,7 @@ input.hole.ok{background:var(--ok-soft);border-bottom:2px solid var(--ok)}
   <header>
     <p class="eyebrow">Calcul littéral · Identités remarquables</p>
     <h1>Identités remarquables</h1>
-    <p class="lede">Compléter les trous, développer, factoriser. L'application vérifie que l'égalité est vraie pour toutes les valeurs de <i>x</i> : s'il existe plusieurs bonnes réponses, elles sont toutes acceptées.</p>
+    <p class="lede">Compléter les trous et développer. L'application vérifie que l'égalité est vraie pour toutes les valeurs de <i>x</i> : s'il existe plusieurs bonnes réponses, elles sont toutes acceptées.</p>
   </header>
 
   <div class="top">
@@ -116,12 +115,6 @@ input.hole.ok{background:var(--ok-soft);border-bottom:2px solid var(--ok)}
     </div>
   </div>
 
-  <div class="memo" aria-label="Rappel">
-    <b>Rappel</b>
-    <span>(<i>a</i> + <i>b</i>)<sup>2</sup> = <i>a</i><sup>2</sup> + 2<i>ab</i> + <i>b</i><sup>2</sup></span>
-    <span>(<i>a</i> − <i>b</i>)<sup>2</sup> = <i>a</i><sup>2</sup> − 2<i>ab</i> + <i>b</i><sup>2</sup></span>
-    <span>(<i>a</i> − <i>b</i>)(<i>a</i> + <i>b</i>) = <i>a</i><sup>2</sup> − <i>b</i><sup>2</sup></span>
-  </div>
 
   <div class="card"><div class="card-in">
     <span class="lab" id="consigne"></span>
@@ -256,7 +249,7 @@ function keyRow(keys,getTarget){ const d=document.createElement('div'); d.classN
   keys.forEach(([v,lab])=>{ const b=document.createElement('button'); b.type='button'; b.className='key'; b.innerHTML=lab;
     b.addEventListener('mousedown',e=>e.preventDefault()); b.onclick=()=>insertAt(getTarget(),v); d.appendChild(b); }); return d; }
 
-const MODES=[['holes','Compléter les trous'],['qcm','Développer · QCM'],['dev','Développer'],['fac','Factoriser']];
+const MODES=[['holes','Compléter les trous'],['qcm','Développer · QCM'],['dev','Développer']];
 const S={mode:'holes',it:null,done:false,sawSol:false,ok:0,streak:0,best:0,last:null};
 try{S.best=+(localStorage.getItem('idr-best')||0)}catch(e){}
 
