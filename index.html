@@ -1,0 +1,365 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"></head><body>
+<title>Identités remarquables</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=STIX+Two+Text:ital,wght@0,400;0,600;1,400;1,600&display=swap">
+<style>
+/* Layout : une colonne — modes + score, rappel des trois formules, carte quadrillée avec la question, réponse, aides */
+:root{
+  --paper:#f4f6fb; --surface:#ffffff; --grid:#e3e9f4; --margin:#eeb3ae;
+  --ink:#1b2a4a; --muted:#5a6785; --line:#cfd8e8;
+  --cf:#cf3426; --cf-soft:#fde6e2; --rest:#2556cf; --rest-soft:#e5ecfd;
+  --ok:#1b8553; --ok-soft:#e0f3e8; --warn:#9a6208; --warn-soft:#fbf0d9;
+  --display:'Bricolage Grotesque','Atkinson Hyperlegible',system-ui,sans-serif;
+  --body:'Atkinson Hyperlegible',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --math:'STIX Two Text','Cambria Math','Times New Roman',serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#0f1522; --surface:#161f31; --grid:#1f2a40; --margin:#5e3134;
+  --ink:#e7ecf6; --muted:#9ba8c2; --line:#2c3a56;
+  --cf:#ff7b6c; --cf-soft:#3b1f24; --rest:#8aaaff; --rest-soft:#1c2a4c;
+  --ok:#52cc8f; --ok-soft:#14321f; --warn:#f0b65a; --warn-soft:#33270f; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#0f1522; --surface:#161f31; --grid:#1f2a40; --margin:#5e3134;
+  --ink:#e7ecf6; --muted:#9ba8c2; --line:#2c3a56;
+  --cf:#ff7b6c; --cf-soft:#3b1f24; --rest:#8aaaff; --rest-soft:#1c2a4c;
+  --ok:#52cc8f; --ok-soft:#14321f; --warn:#f0b65a; --warn-soft:#33270f; color-scheme:dark}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5}
+.wrap{margin:0 auto;padding-block:28px 56px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:20px}
+.eyebrow{font-size:.75rem;letter-spacing:.09em;text-transform:uppercase;font-weight:700;color:var(--cf);margin:0}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(1.7rem,4vw,2.4rem);line-height:1.1;letter-spacing:-.015em;margin:.15em 0 .25em;text-wrap:balance}
+.lede{margin:0;color:var(--muted);max-width:68ch}
+.m{font-family:var(--math)}
+i{font-style:italic}
+.frac{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;font-size:.78em;line-height:1.05;margin:0 .08em}
+.frac>span:first-child{border-bottom:1px solid currentColor;padding:0 .12em}
+.hl{color:var(--cf);background:var(--cf-soft);font-weight:600;border-radius:.2em;padding:0 .1em}
+.bk{font-size:1.15em;line-height:1}
+.top{display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between}
+.levels{display:flex;flex-wrap:wrap;gap:6px}
+.lv{font:inherit;font-size:.92rem;font-weight:700;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:7px 14px;cursor:pointer}
+.lv[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.score{display:flex;gap:18px;font-size:.85rem;color:var(--muted)}
+.score div{display:flex;flex-direction:column;align-items:flex-end}
+.score strong{font-family:var(--display);font-size:1.5rem;line-height:1;color:var(--ink);font-variant-numeric:tabular-nums}
+.score .hot strong{color:var(--cf)}
+.card{position:relative;background-color:var(--surface);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:22px 22px;border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.card::before{content:"";position:absolute;top:0;bottom:0;left:38px;width:2px;background:var(--margin)}
+.card-in{position:relative;padding:20px 22px 24px 60px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.lab{font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--muted)}
+.btn{font:inherit;font-weight:700;border-radius:6px;padding:10px 16px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+.btn:hover:not(:disabled){border-color:var(--muted)}
+.btn.primary{background:var(--ink);border-color:var(--ink);color:var(--surface)}
+.btn.sm{padding:7px 12px;font-size:.92rem}
+.btn:disabled{opacity:.4;cursor:default}
+:focus-visible{outline:3px solid var(--rest);outline-offset:2px}
+input.math,textarea.math{font-family:var(--math);font-size:1.2rem;padding:8px 12px;border:1px solid var(--line);border-radius:6px;background:var(--paper);color:var(--ink);min-width:0;box-sizing:border-box}
+input.math:focus,textarea.math:focus{border-color:var(--rest);outline:none;box-shadow:0 0 0 3px var(--rest-soft)}
+.keys{display:flex;flex-wrap:wrap;gap:6px}
+.key{font-family:var(--math);font-size:1.05rem;min-width:40px;padding:5px 10px;border:1px solid var(--line);border-radius:6px;background:var(--paper);color:var(--ink);cursor:pointer}
+.preview{font-family:var(--math);font-size:1.2rem;min-height:1.6em;color:var(--muted)}
+.preview .lbl{font-family:var(--body);font-size:.8rem;margin-right:8px;letter-spacing:.04em}
+.fb{border-radius:6px;padding:10px 14px;border-left:4px solid}
+.fb .m{font-size:1.08em}
+.fb.ok{background:var(--ok-soft);border-color:var(--ok)}
+.fb.warn{background:var(--warn-soft);border-color:var(--warn)}
+.fb.no{background:var(--cf-soft);border-color:var(--cf)}
+.panel{background:var(--surface);border:1px dashed var(--line);border-radius:6px;padding:14px 18px}
+.panel h3{margin:0 0 8px;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.sol{display:grid;grid-template-columns:auto auto;justify-content:start;column-gap:.35em;row-gap:.45em;font-family:var(--math);font-size:clamp(17px,2.6vw,22px);white-space:nowrap;overflow-x:auto;align-items:baseline}
+.sol .pre{text-align:right;color:var(--muted)}
+.final{display:inline-block;box-shadow:0 0 0 2px var(--ok);border-radius:.2em;padding:0 .3em;background:var(--ok-soft)}
+.note{font-size:.95rem;color:var(--muted);margin:8px 0 0}
+.actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.actions .spacer{flex:1}
+.shake{animation:shake .4s}
+@keyframes shake{20%,60%{transform:translateX(-4px)}40%,80%{transform:translateX(4px)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+.wrap{max-width:860px}
+.memo{display:flex;flex-wrap:wrap;gap:8px 28px;font-family:var(--math);font-size:1.12rem;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:10px 16px}
+.memo span{white-space:nowrap}
+.memo b{font-family:var(--body);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);align-self:center}
+.expr{font-family:var(--math);font-size:clamp(21px,4vw,32px);white-space:nowrap;overflow-x:auto;padding:6px 0 8px;line-height:1.6}
+.eqs{margin:0 .25em}
+input.hole{font-family:var(--math);font-size:.9em;width:3.4em;padding:.05em .25em;border:none;border-bottom:2px dashed var(--muted);background:var(--rest-soft);color:var(--ink);text-align:center;border-radius:.2em .2em 0 0;vertical-align:baseline}
+input.hole.sign{width:1.4em}
+input.hole:focus{outline:none;border-bottom-color:var(--rest);border-bottom-style:solid}
+input.hole.ok{background:var(--ok-soft);border-bottom:2px solid var(--ok)}
+.work{display:flex;flex-direction:column;gap:10px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.row input.math{flex:1 1 240px}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:560px){.opts{grid-template-columns:1fr}}
+.opt{font-family:var(--math);font-size:1.25rem;text-align:left;padding:12px 16px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--ink);cursor:pointer;display:flex;gap:12px;align-items:baseline}
+.opt .l{font-family:var(--display);font-weight:800;font-size:.95rem;color:var(--muted)}
+.opt:hover:not(:disabled){border-color:var(--muted)}
+.opt.bad{background:var(--cf-soft);border-color:var(--cf);opacity:.75}
+.opt.good{background:var(--ok-soft);border-color:var(--ok)}
+.opt:disabled{cursor:default}
+</style>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Calcul littéral · Identités remarquables</p>
+    <h1>Identités remarquables</h1>
+    <p class="lede">Compléter les trous, développer, factoriser. L'application vérifie que l'égalité est vraie pour toutes les valeurs de <i>x</i> : s'il existe plusieurs bonnes réponses, elles sont toutes acceptées.</p>
+  </header>
+
+  <div class="top">
+    <div class="levels" id="modes" role="group" aria-label="Type d'exercice"></div>
+    <div class="score">
+      <div><strong id="sOk">0</strong>réussis</div>
+      <div class="hot"><strong id="sStreak">0</strong>série</div>
+      <div><strong id="sBest">0</strong>record</div>
+    </div>
+  </div>
+
+  <div class="memo" aria-label="Rappel">
+    <b>Rappel</b>
+    <span>(<i>a</i> + <i>b</i>)<sup>2</sup> = <i>a</i><sup>2</sup> + 2<i>ab</i> + <i>b</i><sup>2</sup></span>
+    <span>(<i>a</i> − <i>b</i>)<sup>2</sup> = <i>a</i><sup>2</sup> − 2<i>ab</i> + <i>b</i><sup>2</sup></span>
+    <span>(<i>a</i> − <i>b</i>)(<i>a</i> + <i>b</i>) = <i>a</i><sup>2</sup> − <i>b</i><sup>2</sup></span>
+  </div>
+
+  <div class="card"><div class="card-in">
+    <span class="lab" id="consigne"></span>
+    <div class="expr" id="q"></div>
+  </div></div>
+
+  <div class="work" id="work"></div>
+  <div id="keysBox"></div>
+  <div id="fb"></div>
+
+  <div class="actions">
+    <button class="btn primary" id="check">Vérifier</button>
+    <button class="btn" id="sol">Voir une solution</button>
+    <span class="spacer"></span>
+    <button class="btn" id="new">Nouvelle question →</button>
+  </div>
+  <div class="panel" id="solPanel" hidden></div>
+</div>
+
+<script>
+/* ===== Outils communs : fractions, polynômes, lecture des réponses ===== */
+const $ = s => document.querySelector(s);
+const escS = s => String(s).replace(/[<>&"]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
+const ri = (a,b) => a + Math.floor(Math.random()*(b-a+1));
+const pick = a => a[Math.floor(Math.random()*a.length)];
+const sgn = () => pick([1,-1]);
+const shuffle = a => { a = a.slice(); for (let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+function gcd(a,b){ a=Math.abs(a); b=Math.abs(b); while(b){ [a,b]=[b,a%b]; } return a; }
+
+/* fractions */
+function F(n,d=1){ if(d===0) throw new Error('div0'); if(d<0){n=-n;d=-d;} const k=gcd(n,d)||1; return {n:n/k,d:d/k}; }
+const F0=F(0), F1=F(1);
+const Fa=(a,b)=>F(a.n*b.d+b.n*a.d,a.d*b.d), Fm=(a,b)=>F(a.n*b.n,a.d*b.d), Finv=a=>F(a.d,a.n);
+const Fz=a=>a.n===0, Feq=(a,b)=>a.n===b.n&&a.d===b.d;
+const fstr=a=>a.d===1?String(a.n):(a.n<0?'-':'')+Math.abs(a.n)+'/'+a.d;
+
+/* polynômes : tableau de fractions, indice = degré */
+function pn(p){ p=p.slice(); while(p.length>1&&Fz(p[p.length-1])) p.pop(); if(!p.length) p=[F0]; return p; }
+const P=(...v)=>pn(v.map(x=>typeof x==='object'?x:F(x)));
+const Q={
+  add(a,b){ const r=[]; for(let i=0;i<Math.max(a.length,b.length);i++) r[i]=Fa(a[i]||F0,b[i]||F0); return pn(r); },
+  mul(a,b){ const r=Array.from({length:a.length+b.length-1},()=>F0); a.forEach((x,i)=>b.forEach((y,j)=>{ r[i+j]=Fa(r[i+j],Fm(x,y)); })); return pn(r); },
+  sc(a,k){ return pn(a.map(x=>Fm(x,typeof k==='object'?k:F(k)))); },
+  neg(a){ return Q.sc(a,-1); }, sub(a,b){ return Q.add(a,Q.neg(b)); }
+};
+const peq=(a,b)=>{ a=pn(a); b=pn(b); return a.length===b.length&&a.every((v,i)=>Feq(v,b[i])); };
+const nzc=p=>p.filter(v=>!Fz(v)).length;
+const deg=p=>pn(p).length-1;
+function monoStr(a,d){ const ab=F(Math.abs(a.n),a.d), one=ab.n===1&&ab.d===1; return ((one&&d>0)?'':fstr(ab))+(d===0?'':d===1?'x':'x^'+d); }
+function termsS(L){ if(!L.length) return '0'; return L.map((m,i)=>{ const neg=m.a.n<0, s=monoStr(m.a,m.d); return i===0?(neg?'-':'')+s:(neg?' - ':' + ')+s; }).join(''); }
+const monosOf=(p,k=1)=>{ const L=[]; for(let d=p.length-1;d>=0;d--) if(p[d]&&!Fz(p[d])) L.push({a:Fm(p[d],F(k)),d}); return L; };
+const polyS=p=>termsS(monosOf(pn(p)));
+const monoS=(a,d)=>termsS([{a:typeof a==='object'?a:F(a),d}]);
+const fS=p=>nzc(p)>=2?'('+polyS(p)+')':polyS(p);
+
+/* affichage : chaîne ASCII → HTML mathématique */
+function fm(s){ let o='',i=0; while(i<s.length){ const ch=s[i];
+  if(/\d/.test(ch)){ let j=i; while(j<s.length&&/\d/.test(s[j])) j++; const a=s.slice(i,j);
+    if(s[j]==='/'&&/\d/.test(s[j+1]||'')){ let k=j+1; while(k<s.length&&/\d/.test(s[k])) k++; o+=`<span class="frac"><span>${a}</span><span>${s.slice(j+1,k)}</span></span>`; i=k; continue; }
+    o+=a; i=j; continue; }
+  if(ch==='{'){ o+='<span class="hl">'; i++; continue; }
+  if(ch==='}'){ o+='</span>'; i++; continue; }
+  if(ch==='^'){ let j=i+1,d=''; while(j<s.length&&/\d/.test(s[j])) d+=s[j++]; o+='<sup>'+d+'</sup>'; i=j; continue; }
+  if(ch==='-'){ o+='−'; i++; continue; }
+  if(ch==='*'){ o+='×'; i++; continue; }
+  if(ch==='x'){ o+='<i>x</i>'; i++; continue; }
+  if(ch==='['||ch===']'){ o+='<span class="bk">'+ch+'</span>'; i++; continue; }
+  o+=escS(ch); i++; }
+  return o; }
+const tx=s=>s.replace(/`([^`]+)`/g,(_,m)=>'<span class="m">'+fm(m)+'</span>');
+const M=s=>'<span class="m">'+fm(s)+'</span>';
+const pts=x=>String(x).replace('.',',');
+
+/* lecture de ce que tape l'élève */
+function tokenize(s){ s=s.replace(/[−–—]/g,'-').replace(/[×·∙•]/g,'*').replace(/÷/g,'/').replace(/²/g,'^2').replace(/³/g,'^3').replace(/X/g,'x');
+  const t=[]; let i=0; while(i<s.length){ const c=s[i]; if(/\s/.test(c)){ i++; continue; }
+    if(/\d/.test(c)){ let j=i; while(j<s.length&&/\d/.test(s[j])) j++; let v=F(parseInt(s.slice(i,j),10));
+      if((s[j]==='.'||s[j]===',')&&/\d/.test(s[j+1]||'')){ let k=j+1; while(k<s.length&&/\d/.test(s[k])) k++; const dec=s.slice(j+1,k); v=F(parseInt(s.slice(i,j)+dec,10),10**dec.length); j=k; }
+      t.push({k:'n',v}); i=j; continue; }
+    if('x+-*/^()[]'.includes(c)){ t.push({k:c}); i++; continue; }
+    throw new Error('char'); }
+  return t; }
+function parse(s){ const T=tokenize(s); let p=0; const pk=()=>T[p]&&T[p].k;
+  const eat=k=>{ if(pk()!==k) throw new Error('expect'); return T[p++]; };
+  function sum(){ const terms=[]; let sg='+'; if(pk()==='+'||pk()==='-') sg=T[p++].k; terms.push({s:sg,n:prod()});
+    while(pk()==='+'||pk()==='-'){ const g=T[p++].k; terms.push({s:g,n:prod()}); }
+    return terms.length===1&&terms[0].s==='+'?terms[0].n:{t:'sum',terms}; }
+  function prod(){ const fs=[pw()]; for(;;){ const k=pk();
+      if(k==='*'){ p++; fs.push(pw()); } else if(k==='/'){ p++; fs.push({t:'inv',e:pw()}); }
+      else if(['n','x','(','['].includes(k)) fs.push(pw()); else break; }
+    return fs.length===1?fs[0]:{t:'prod',fs}; }
+  function pw(){ let b=base(); while(pk()==='^'){ p++; const v=eat('n').v; if(v.d!==1||v.n>9) throw new Error('pow'); b={t:'pow',b,e:v.n}; } return b; }
+  function base(){ const k=pk(); if(k==='n') return {t:'num',v:T[p++].v}; if(k==='x'){ p++; return {t:'x'}; }
+    if(k==='('||k==='['){ p++; const e=sum(); eat(k==='('?')':']'); return {t:'grp',e,br:k}; }
+    if(k==='-'){ p++; return {t:'neg',e:pw()}; } throw new Error('base'); }
+  if(!T.length) throw new Error('empty'); const r=sum(); if(p!==T.length) throw new Error('trail'); ev(r); return r; }
+function ev(n){ switch(n.t){
+  case'num': return [n.v]; case'x': return [F0,F1]; case'neg': return Q.neg(ev(n.e)); case'grp': return ev(n.e);
+  case'pow':{ let r=[F1]; const b=ev(n.b); for(let i=0;i<n.e;i++) r=Q.mul(r,b); return r; }
+  case'inv':{ const c=ev(n.e); if(c.length!==1||Fz(c[0])) throw new Error('inv'); return [Finv(c[0])]; }
+  case'prod': return n.fs.reduce((r,f)=>Q.mul(r,ev(f)),[F1]);
+  case'sum': return n.terms.reduce((r,t)=>Q.add(r,t.s==='-'?Q.neg(ev(t.n)):ev(t.n)),[F0]); } }
+function h(n){ switch(n.t){
+  case'num': return n.v.d===1?String(n.v.n):`<span class="frac"><span>${n.v.n}</span><span>${n.v.d}</span></span>`;
+  case'x': return '<i>x</i>'; case'neg': return '−'+h(n.e);
+  case'pow': return h(n.b)+'<sup>'+n.e+'</sup>';
+  case'grp': return (n.br==='['?'<span class="bk">[</span>':'(')+h(n.e)+(n.br==='['?'<span class="bk">]</span>':')');
+  case'inv': return '/'+h(n.e);
+  case'prod':{ const out=[]; n.fs.forEach(f=>{ if(f.t==='inv'&&out.length){ const a=out.pop(); out.push({h:`<span class="frac"><span>${a.h}</span><span>${h(f.e)}</span></span>`,t:'frac'}); } else out.push({h:h(f),t:f.t}); });
+    return out.map((o,i)=>i===0?o.h:((o.t==='num'||o.t==='neg'||o.t==='frac')?' × ':'')+o.h).join(''); }
+  case'sum': return n.terms.map((t,i)=>(i===0?(t.s==='-'?'−':''):(t.s==='-'?' − ':' + '))+h(t.n)).join(''); } }
+
+/* forme de la réponse */
+const hasX=n=>n.t==='x'||(n.t==='neg'||n.t==='grp'||n.t==='inv')&&hasX(n.e)||n.t==='pow'&&hasX(n.b)||n.t==='prod'&&n.fs.some(hasX)||n.t==='sum'&&n.terms.some(t=>hasX(t.n));
+function hasVarSum(n){ if(n.t==='sum') return hasX(n); if(n.t==='grp'||n.t==='neg'||n.t==='inv') return hasVarSum(n.e); if(n.t==='pow') return hasVarSum(n.b); if(n.t==='prod') return n.fs.some(hasVarSum); return false; }
+const topTerms=a=>a.t==='sum'?a.terms.map(t=>t.n):[a];
+const isMono=n=>!hasVarSum(n)&&nzc(ev(n))<=1;
+function isReducedSum(a){ const ts=topTerms(a); if(!ts.every(t=>isMono(t)&&nzc(ev(t))===1)) return false; const ds=ts.map(t=>deg(ev(t))); return new Set(ds).size===ds.length; }
+function factorsOf(a){ let n=a; for(;;){ if(n.t==='sum'&&n.terms.length===1){ n=n.terms[0].n; continue; } if(n.t==='neg'){ n=n.e; continue; } break; }
+  if(n.t==='prod') return n.fs.map(f=>f.t==='neg'?f.e:f); if(n.t==='pow'&&deg(ev(n.b))>=1) return [n]; return null; }
+function isFactored(a){ const fs=factorsOf(a); if(!fs) return 'sum';
+  const nonc=fs.reduce((s,f)=>s+(f.t==='inv'?0:f.t==='pow'&&deg(ev(f.b))>=1?f.e:deg(ev(f))>=1?1:0),0);
+  if(nonc<2) return 'sum';
+  for(const f of fs){ const b=f.t==='pow'?f.b:f; if(b.t==='grp'&&nzc(ev(b.e))>=2&&!isReducedSum(b.e)) return 'unred'; }
+  return 'ok'; }
+
+/* clavier d'aide : insère dans le champ ciblé */
+function insertAt(el,v){ if(!el||el.disabled) return; const s=el.selectionStart??el.value.length, e=el.selectionEnd??el.value.length;
+  if(v==='²'&&!/[x)]$/.test(el.value.slice(0,s))) v='x²';
+  el.value=el.value.slice(0,s)+v+el.value.slice(e); el.focus(); el.setSelectionRange(s+v.length,s+v.length); el.dispatchEvent(new Event('input',{bubbles:true})); }
+function keyRow(keys,getTarget){ const d=document.createElement('div'); d.className='keys';
+  keys.forEach(([v,lab])=>{ const b=document.createElement('button'); b.type='button'; b.className='key'; b.innerHTML=lab;
+    b.addEventListener('mousedown',e=>e.preventDefault()); b.onclick=()=>insertAt(getTarget(),v); d.appendChild(b); }); return d; }
+
+const MODES=[['holes','Compléter les trous'],['qcm','Développer · QCM'],['dev','Développer'],['fac','Factoriser']];
+const S={mode:'holes',it:null,done:false,sawSol:false,ok:0,streak:0,best:0,last:null};
+try{S.best=+(localStorage.getItem('idr-best')||0)}catch(e){}
+
+function genAB(){return{a:pick([1,1,1,2,3,4,5,6,7]),b:ri(1,9)}}
+function idInfo(type,a,b){const A=monoS(a,1),B=String(b);
+  const q=type==='p'?`(${A} + ${B})^2`:type==='m'?`(${A} - ${B})^2`:(Math.random()<.5?`(${A} - ${B})(${A} + ${B})`:`(${A} + ${B})(${A} - ${B})`);
+  const poly=type==='d'?P(-b*b,0,a*a):P(b*b,(type==='m'?-2:2)*a*b,a*a);
+  const Asq=a===1?'x^2':`(${A})^2`;
+  const mid=type==='d'?`${Asq} - ${B}^2`:`${Asq} ${type==='m'?'-':'+'} 2 * ${A} * ${B} + ${B}^2`;
+  const name=type==='p'?'(<i>a</i> + <i>b</i>)²':type==='m'?'(<i>a</i> − <i>b</i>)²':'(<i>a</i> − <i>b</i>)(<i>a</i> + <i>b</i>)';
+  return{type,a,b,A,B,q,poly,mid,name}}
+
+function genHoles(){const type=pick(['p','m','d']),{a,b}=genAB();
+  const V={A:monoS(a,1),B:String(b),C:monoS(a*a,2),D:monoS(2*a*b,1),E:String(b*b),S:'-',A2:monoS(a,1),B2:String(b)};
+  let L,R,sets;
+  if(type==='p'){L=['(','#A',' + ','#B',')^2'];R=['#C',' + ','#D',' + ','#E'];sets=[['B','C','E'],['A','D'],['D','E'],['A','B'],['C','D','E'],['B','D'],['A','E']]}
+  else if(type==='m'){L=['(','#A',' - ','#B',')^2'];R=['#C',' ','#S',' ','#D',' + ','#E'];sets=[['A','B','S','D'],['S','D','E'],['B','C','S','D'],['A','E'],['C','D','E'],['B','D']]}
+  else{L=['(','#A',' - ','#B',')(','#A2',' + ','#B2',')'];R=['#C',' - ','#E'];sets=[['C','B','A2','B2'],['A','B','A2','B2'],['B','B2','C'],['A','A2','E'],['C','E']]}
+  if(Math.random()<.4)[L,R]=[R,L];
+  return{kind:'holes',L,R,V,blanks:pick(sets),info:idInfo(type,a,b)}}
+function genQcm(){const t=pick(['p','m','d']),{a,b}=genAB(),I=idInfo(t,a,b),s=t==='m'?-1:1,c=[];
+  if(t!=='d'){c.push([P(b*b,0,a*a),'Il manque le double produit 2<i>ab</i>.']);
+    c.push([P(b*b,s*a*b,a*a),'Le double produit vaut 2<i>ab</i>, pas <i>ab</i>.']);
+    if(a>1)c.push([P(b*b,s*2*a*b,a),`(${fm(I.A)})² = ${fm(monoS(a*a,2))} : le coefficient aussi est élevé au carré.`]);
+    c.push([P(b*b,-s*2*a*b,a*a),t==='p'?'Dans (<i>a</i> + <i>b</i>)², tous les signes sont +.':'Dans (<i>a</i> − <i>b</i>)², le double produit est précédé d’un −.']);
+    c.push([P(-b*b,s*2*a*b,a*a),'<i>b</i>² est un carré : il est toujours positif.']);
+    if(b!==2)c.push([P(2*b,s*2*a*b,a*a),`${b}² = ${b} × ${b}, pas 2 × ${b}.`])}
+  else{c.push([P(b*b,0,a*a),'(<i>a</i> − <i>b</i>)(<i>a</i> + <i>b</i>) = <i>a</i>² − <i>b</i>² : le dernier terme est négatif.']);
+    c.push([P(-b*b,-2*a*b,a*a),'Ici les doubles produits s’annulent : il n’y a pas de terme en <i>x</i>.']);
+    c.push([P(-b*b,2*a*b,a*a),'Ici les doubles produits s’annulent : il n’y a pas de terme en <i>x</i>.']);
+    if(a>1)c.push([P(-b*b,0,a),`(${fm(I.A)})² = ${fm(monoS(a*a,2))} : le coefficient aussi est élevé au carré.`]);
+    if(b!==2)c.push([P(-2*b,0,a*a),`${b}² = ${b} × ${b}, pas 2 × ${b}.`])}
+  const kept=[];for(const x of shuffle(c)){if(peq(x[0],I.poly)||kept.some(k=>peq(k[0],x[0])))continue;kept.push(x);if(kept.length===3)break}
+  return{kind:'qcm',info:I,opts:shuffle([{p:I.poly,ok:true},...kept.map(k=>({p:k[0],why:k[1]}))])}}
+
+function newItem(){const m=S.mode;S.done=false;S.sawSol=false;
+  if(m==='holes')S.it=genHoles();else if(m==='qcm')S.it=genQcm();else{const t=pick(['p','m','d']),{a,b}=genAB();S.it={kind:m,info:idInfo(t,a,b)}}
+  render();updScore()}
+
+function render(){const it=S.it,I=it.info;$('#fb').innerHTML='';$('#solPanel').hidden=true;$('#check').disabled=false;$('#sol').disabled=false;
+  $('#check').hidden=it.kind==='qcm';$('#keysBox').innerHTML='';S.last=null;
+  if(it.kind==='holes'){$('#consigne').innerHTML='Compléter pour que l’égalité soit vraie pour toutes les valeurs de <i>x</i>';
+    const tok=t=>{if(t[0]!=='#')return fm(t);const k=t.slice(1);if(!it.blanks.includes(k))return fm(it.V[k]);
+      return `<input class="hole${k==='S'?' sign':''}" data-k="${k}" id="h-${k}" autocomplete="off" autocapitalize="off" spellcheck="false" inputmode="text" aria-label="${k==='S'?'signe à compléter':'case à compléter'}">`};
+    $('#q').innerHTML=it.L.map(tok).join('')+'<span class="eqs"> = </span>'+it.R.map(tok).join('');
+    $('#work').innerHTML='<p class="note" style="margin:0">Une case contient un seul terme, par exemple '+M('3x')+', '+M('25')+' ou '+M('-20x')+'. Une case étroite attend un signe : + ou −.</p>';
+    document.querySelectorAll('.hole').forEach(el=>{el.addEventListener('focus',()=>S.last=el);el.addEventListener('keydown',e=>{if(e.key==='Enter')check()})});
+    S.last=document.querySelector('.hole');addKeys();setTimeout(()=>S.last&&S.last.focus({preventScroll:true}),0)}
+  else if(it.kind==='qcm'){$('#consigne').textContent='Développer et réduire — choisis la bonne réponse';$('#q').innerHTML=fm(I.q);
+    $('#work').innerHTML='<div class="opts">'+it.opts.map((o,i)=>`<button class="opt" data-i="${i}"><span class="l">${'ABCD'[i]}</span><span>${fm(polyS(o.p))}</span></button>`).join('')+'</div>';
+    document.querySelectorAll('.opt').forEach(b=>b.onclick=()=>choose(+b.dataset.i))}
+  else{const dev=it.kind==='dev';$('#consigne').textContent=dev?'Développer et réduire':'Factoriser à l’aide d’une identité remarquable';
+    $('#q').innerHTML=fm(dev?I.q:polyS(I.poly));
+    $('#work').innerHTML=`<div class="row"><input class="math" id="ans" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${dev?'ex. 9x² + 30x + 25':'ex. (3x + 5)²'}"></div><div class="preview" id="prev"></div>`;
+    const A=$('#ans');A.addEventListener('input',live);A.addEventListener('keydown',e=>{if(e.key==='Enter')check()});A.addEventListener('focus',()=>S.last=A);S.last=A;addKeys();setTimeout(()=>A.focus({preventScroll:true}),0)}}
+function addKeys(){$('#keysBox').appendChild(keyRow([['x','<i>x</i>'],['²','<i>x</i>²'],['(','('],[')',')'],['−','−'],['+','+']],()=>S.last))}
+function live(){const v=$('#ans').value.trim();if(!v){$('#prev').innerHTML='';return}
+  try{$('#prev').innerHTML='<span class="lbl">Je lis :</span>'+h(parse(v))}catch(e){$('#prev').innerHTML='<span class="lbl">Je lis :</span>…'}}
+function fb(kind,html){$('#fb').innerHTML=`<div class="fb ${kind}">${html}</div>`}
+
+function check(){if(S.done)return;const it=S.it,I=it.info;
+  if(it.kind==='holes'){const vals={};
+    for(const k of it.blanks){const el=$('#h-'+k);let v=el.value.trim();
+      if(!v){fb('warn','Remplis toutes les cases.');el.focus();return}
+      if(k==='S'){v=v.replace(/[−–]/g,'-');if(v!=='+'&&v!=='-'){fb('warn','La case étroite attend un signe : + ou −.');el.focus();return}vals[k]=v;continue}
+      let ast;try{ast=parse(v)}catch(e){fb('no',`Je n’arrive pas à lire « ${escS(v)} ».`);el.focus();return}
+      if(!isMono(ast)||nzc(ev(ast))!==1){fb('warn',`Chaque case contient un seul terme non nul. Revois « ${escS(v)} ».`);el.focus();return}
+      vals[k]='('+v+')'}
+    const build=arr=>arr.map(t=>t[0]!=='#'?t:(it.blanks.includes(t.slice(1))?vals[t.slice(1)]:it.V[t.slice(1)])).join('');
+    const l=ev(parse(build(it.L))),r=ev(parse(build(it.R)));
+    if(peq(l,r)){document.querySelectorAll('.hole').forEach(e=>{e.classList.add('ok');e.disabled=true});return win('L’égalité est vraie pour toutes les valeurs de <i>x</i>.')}
+    return fb('no',`L’égalité n’est pas vraie pour toutes les valeurs de <i>x</i>. En développant, le membre de gauche donne ${M(polyS(l))} et le membre de droite donne ${M(polyS(r))}.`)}
+  const v=$('#ans').value.trim();if(!v)return;let ast,p;
+  try{ast=parse(v);p=ev(ast)}catch(e){return fb('no','Je n’arrive pas à lire ta réponse. Vérifie les parenthèses et les signes.')}
+  if(it.kind==='dev'){
+    if(!peq(p,I.poly))return fb('no',`Ta réponse n’est pas égale à ${M(I.q)}. Repère <i>a</i> et <i>b</i>, puis vérifie le double produit et les signes.`);
+    if(!isReducedSum(ast))return fb('warn','C’est égal, mais ce n’est pas encore développé et réduit.');
+    return win('C’est bien la forme développée et réduite.')}
+  if(!peq(p,I.poly))return fb('no',`Ta réponse développée donne ${M(polyS(p))}, ce n’est pas l’expression de départ.`);
+  const f=isFactored(ast);
+  if(f==='sum')return fb('warn','C’est égal, mais ce n’est pas un produit. Factoriser, c’est écrire un produit.');
+  if(f==='unred')return fb('warn','C’est juste, mais il reste à réduire l’intérieur des parenthèses.');
+  win('C’est bien une forme factorisée.')}
+function choose(i){if(S.done)return;const o=S.it.opts[i],btn=document.querySelector(`.opt[data-i="${i}"]`);
+  if(o.ok){btn.classList.add('good');document.querySelectorAll('.opt').forEach(b=>b.disabled=true);return win('C’est la bonne réponse.')}
+  btn.classList.add('bad');btn.disabled=true;S.wrong=true;fb('no',o.why);S.streak=0;updScore()}
+function win(msg){S.done=true;$('#check').disabled=true;
+  if(!S.sawSol&&!(S.it.kind==='qcm'&&S.wrong)){S.ok++;S.streak++;if(S.streak>S.best){S.best=S.streak;try{localStorage.setItem('idr-best',S.best)}catch(e){}}}
+  else if(!S.sawSol){S.ok++}
+  S.wrong=false;fb('ok','<b>Bravo !</b> '+msg);updScore();$('#new').focus()}
+function showSol(){const it=S.it,I=it.info;S.sawSol=true;S.streak=0;updScore();const P_=$('#solPanel');P_.hidden=false;$('#sol').disabled=true;
+  const ab=`avec <i>a</i> = ${M(I.A)} et <i>b</i> = ${M(I.B)}`;let rows,note='';
+  if(it.kind==='holes'){const tok=t=>t[0]!=='#'?fm(t):it.blanks.includes(t.slice(1))?'<span class="hl">'+fm(it.V[t.slice(1)])+'</span>':fm(it.V[t.slice(1)]);
+    rows=[['',it.L.map(tok).join('')+' = '+it.R.map(tok).join('')]];
+    note=`On utilise ${I.name}, ${ab}. D’autres réponses peuvent convenir si l’égalité reste vraie.`}
+  else if(it.kind==='fac'){rows=[['',fm(polyS(I.poly))],['=',fm(I.mid)],['=',`<span class="final">${fm(I.q)}</span>`]];note=`On reconnaît ${I.name}, ${ab}.`}
+  else{rows=[['',fm(I.q)],['=',fm(I.mid)],['=',`<span class="final">${fm(polyS(I.poly))}</span>`]];note=`On utilise ${I.name}, ${ab}.`}
+  P_.innerHTML='<h3>Une solution</h3><div class="sol">'+rows.map(r=>`<span class="pre">${r[0]}</span><span>${r[1]}</span>`).join('')+`</div><p class="note">${note}</p>`}
+function updScore(){$('#sOk').textContent=S.ok;$('#sStreak').textContent=S.streak;$('#sBest').textContent=S.best}
+function setMode(m){S.mode=m;document.querySelectorAll('.lv').forEach(b=>b.setAttribute('aria-pressed',b.dataset.m===m));newItem()}
+
+MODES.forEach(([m,name])=>{const b=document.createElement('button');b.className='lv';b.dataset.m=m;b.textContent=name;b.onclick=()=>setMode(m);$('#modes').appendChild(b)});
+$('#check').onclick=check;$('#sol').onclick=showSol;$('#new').onclick=newItem;
+setMode('holes');
+</script>
+</body></html>
